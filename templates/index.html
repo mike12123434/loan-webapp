@@ -1,0 +1,644 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>永豐｜小微企業貸款利率試算（Demo）</title>
+
+  <style>
+    :root{
+      --sp-red:  #A83C3E;
+      --sp-blue: #274192;
+
+      --bg:#f4f6f7;
+      --card:#ffffff;
+      --text:#0f172a;
+      --muted:#64748b;
+      --line:#dbe3ea;
+      --input:#ffffff;
+
+      --danger:#d32f2f;
+      --radius:16px;
+      --shadow:0 12px 30px rgba(15,23,42,.08);
+      --max: 980px;
+    }
+
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Arial, "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+      background:var(--bg);
+      color:var(--text);
+    }
+
+    header{
+      background: var(--sp-red);
+      color:#fff;
+      box-shadow: 0 8px 18px rgba(0,0,0,.12);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    .wrap{max-width:var(--max); margin:0 auto; padding:14px 16px;}
+
+    .brand{display:flex; align-items:center; gap:12px;}
+    .brand-logo{
+      height: 40px;
+      width: auto;
+      display:block;
+      background:#fff;
+      padding:6px 10px;
+      border-radius:10px;
+    }
+    .brand h1{margin:0;font-size:16px;font-weight:900}
+    .brand p{margin:2px 0 0; font-size:12px; opacity:.95}
+
+    main{max-width:var(--max); margin:0 auto; padding:16px;}
+    .grid{
+      display:grid;
+      grid-template-columns: 1.05fr .95fr;
+      gap:16px;
+      align-items:start;
+    }
+    .card{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .card-h{
+      padding:16px;
+      border-bottom:1px solid var(--line);
+      display:flex;justify-content:space-between;gap:12px;align-items:flex-start;
+    }
+    .card-h .title{margin:0;font-weight:900;font-size:16px}
+    .card-b{padding:16px}
+
+    .form-row{
+      display:grid;
+      grid-template-columns: 240px 1fr;
+      gap:14px;
+      align-items:start;
+      padding:10px 0;
+    }
+    .form-row + .form-row{border-top:1px dashed #edf2f7}
+    .lbl{
+      font-weight:800;
+      color:#111827;
+      padding-top:10px;
+      line-height:1.4;
+      font-size:14px;
+    }
+
+    input, select{
+      width:100%;
+      padding:12px 12px;
+      border-radius: 10px;
+      border:1.5px solid var(--sp-blue);
+      background:var(--input);
+      font-size:14px;
+      outline:none;
+      transition:.15s;
+    }
+    input:focus, select:focus{
+      border-color: var(--sp-blue);
+      box-shadow: 0 0 0 4px rgba(39,65,146,.14);
+    }
+
+    .hint{font-size:12px;color:var(--muted);margin-top:6px;line-height:1.5;}
+    .err{font-size:12px;color:var(--danger);margin-top:6px;display:none;font-weight:800;}
+    .err.show{display:block;}
+
+    .unit{display:flex; gap:10px; align-items:center;}
+    .unit .suffix{min-width: 44px;color:#111827;font-weight:900;}
+
+    .radio{display:flex; gap:20px; align-items:center; padding-top:6px;}
+    .radio label{display:flex; gap:8px; align-items:center; font-weight:800;}
+    .radio input{width:auto}
+
+    .agree{
+      display:grid;
+      grid-template-columns: 18px 1fr;
+      gap:10px;
+      align-items:start;
+      font-weight:900;
+      line-height:1.6;
+      white-space: normal;
+      word-break: break-word;
+    }
+    .agree input{margin-top:3px;}
+
+    .actions{
+      display:flex; gap:14px; justify-content:flex-end;
+      padding-top:14px;
+      border-top:1px solid var(--line);
+      margin-top: 10px;
+    }
+    .btn{
+      cursor:pointer;
+      padding:12px 18px;
+      border-radius:12px;
+      font-weight:900;
+      font-size:14px;
+    }
+
+    .btn-outline{
+      background:#fff;
+      border:1.5px solid var(--sp-blue);
+      color:var(--sp-blue);
+      min-width: 140px;
+    }
+    .btn-outline:hover{background:#f7fbff}
+
+    .btn-primary{
+      border:0;
+      background:var(--sp-blue);
+      color:#fff;
+      min-width: 180px;
+    }
+    .btn-primary:hover{filter: brightness(0.98);}
+
+    .kpi{display:grid;gap:12px;}
+    .big{
+      border-radius: 14px;
+      padding:14px;
+      border:1px solid rgba(39,65,146,.25);
+      background: linear-gradient(180deg, rgba(39,65,146,.12), rgba(39,65,146,.05));
+    }
+    .big .k{font-size:12px;color:var(--muted);font-weight:800;margin-bottom:6px}
+    .big .v{font-size:26px;font-weight:1000;color:var(--sp-blue);letter-spacing:.02em}
+
+    .kv{display:grid;grid-template-columns: 1fr 1fr;gap:12px;}
+    .box{
+      border:1px solid var(--line);
+      border-radius: 14px;
+      padding:12px;
+      background:#fff;
+    }
+    .box .k{font-size:12px;color:var(--muted);font-weight:800;margin-bottom:6px}
+    .box .v{font-size:16px;font-weight:1000;color:#0f172a}
+
+    .status{font-size:12px;margin-top:10px;color:#334155;line-height:1.6;}
+    .status.err{color:var(--danger); font-weight:900;}
+
+    @media (max-width: 920px){
+      .grid{grid-template-columns:1fr}
+      .form-row{grid-template-columns:1fr}
+      .lbl{padding-top:0}
+      .kv{grid-template-columns:1fr}
+      .actions{justify-content:stretch}
+      .btn{flex:1}
+    }
+  </style>
+</head>
+
+<body>
+<header>
+  <div class="wrap">
+    <div class="brand">
+      <img class="brand-logo" src="{{ url_for('static', filename='sinopac-logo.jpg') }}" alt="永豐銀行 Bank SinoPac" />
+      <div>
+        <h1>永豐銀行 - 小微東風貸</h1>
+        <p>線上利率試算</p>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="grid">
+    <!-- Form -->
+    <section class="card" aria-label="試算表單">
+      <div class="card-h">
+        <div><p class="title">請輸入申貸資訊</p></div>
+      </div>
+
+      <div class="card-b">
+        <form id="loanForm" novalidate>
+          <!-- 1 公司統編 -->
+          <div class="form-row">
+            <div class="lbl">公司統編：</div>
+            <div class="control">
+              <input id="tax_id" inputmode="numeric" placeholder="請輸入公司統編（8碼）" maxlength="8" />
+              <div class="err" id="err_tax_id">請輸入 8 碼公司統編</div>
+            </div>
+          </div>
+
+          <!-- 2 欲申貸額度(萬元) -->
+          <div class="form-row">
+            <div class="lbl">欲申貸額度：</div>
+            <div class="control">
+              <div class="unit">
+                <input id="loan_amt_10k" type="number" min="1" max="99999" step="1" placeholder="請輸入欲申貸額度" />
+                <div class="suffix">萬元</div>
+              </div>
+              <div class="err" id="err_loan_amt_10k">請輸入 1-99,999（單位：萬元）</div>
+            </div>
+          </div>
+
+          <!-- 3 貸款用途 -->
+          <div class="form-row">
+            <div class="lbl">貸款用途：</div>
+            <div class="control">
+              <select id="purpose">
+                <option value="">請選擇</option>
+                <option value="working_capital">週轉金</option>
+                <option value="equipment">購置設備</option>
+                <option value="facility">購置廠房或辦公室</option>
+                <option value="contract">工程合約貸款</option>
+              </select>
+              <div class="err" id="err_purpose">此欄位為必填</div>
+            </div>
+          </div>
+
+          <!-- 4 產業類別（✅ 19 類、value 與後端完全一致） -->
+          <div class="form-row">
+            <div class="lbl">產業類別：</div>
+            <div class="control">
+              <select id="industry">
+                <option value="">請選擇</option>
+                <option value="agriculture">1. 農林漁牧業</option>
+                <option value="mining">2. 礦業及土石採取業</option>
+                <option value="manufacturing">3. 製造業</option>
+                <option value="electricity_gas">4. 電力及燃料供應業</option>
+                <option value="water_waste">5. 用水供應及汙染整治業</option>
+                <option value="construction">6. 營建工程業</option>
+                <option value="wholesale_retail">7. 批發及零售業</option>
+                <option value="transport_storage">8. 運輸及倉儲業</option>
+                <option value="hospitality">9. 住宿及餐飲業</option>
+                <option value="media_it">10. 出版影音及資通訊業</option>
+                <option value="finance_insurance">11. 金融及保險業</option>
+                <option value="real_estate">12. 不動產業</option>
+                <option value="professional_science">13. 專業、科學及技術服務業</option>
+                <option value="support_services">14. 支援服務業</option>
+                <option value="public_admin">15. 公共行政及國防；強制性社會安全</option>
+                <option value="education">16. 教育業</option>
+                <option value="healthcare_social">17. 醫療保健及社會工作服務業</option>
+                <option value="arts_entertainment">18. 藝術、娛樂及休閒服務業</option>
+                <option value="other_services">19. 其他服務業</option>
+              </select>
+              <div class="err" id="err_industry">此欄位為必填</div>
+            </div>
+          </div>
+
+          <!-- 5 公司成立時間 -->
+          <div class="form-row">
+            <div class="lbl">公司成立時間：</div>
+            <div class="control">
+              <select id="years">
+                <option value="">請選擇</option>
+                <option value="5p">5年(含)以上</option>
+                <option value="3to5">3年(含)以上-未滿5年</option>
+                <option value="1to3">1年(含)以上-未滿3年</option>
+                <option value="lt1">未滿1年</option>
+              </select>
+              <div class="err" id="err_years">此欄位為必填</div>
+            </div>
+          </div>
+
+          <!-- 6 是否變更負責人 -->
+          <div class="form-row">
+            <div class="lbl">公司是否曾變更負責人：</div>
+            <div class="control">
+              <div class="radio">
+                <label><input type="radio" name="chg_owner" value="yes" /> 是</label>
+                <label><input type="radio" name="chg_owner" value="no" checked /> 否</label>
+              </div>
+            </div>
+          </div>
+
+          <!-- 7 公司平均存款(萬元) -->
+          <div class="form-row">
+            <div class="lbl">公司近六個月平均存款餘額合計：</div>
+            <div class="control">
+              <div class="unit">
+                <input id="co_avg_dep_10k" type="number" min="0" max="99999" step="1" placeholder="請輸入 0-99,999" />
+                <div class="suffix">萬元</div>
+              </div>
+              <div class="err" id="err_co_avg_dep_10k">請輸入 0-99,999（單位：萬元）</div>
+            </div>
+          </div>
+
+          <!-- 8 負責人平均存款(萬元) -->
+          <div class="form-row">
+            <div class="lbl">負責人近六個月平均存款餘額合計：</div>
+            <div class="control">
+              <div class="unit">
+                <input id="owner_avg_dep_10k" type="number" min="0" max="99999" step="1" placeholder="請輸入 0-99,999" />
+                <div class="suffix">萬元</div>
+              </div>
+              <div class="err" id="err_owner_avg_dep_10k">請輸入 0-99,999（單位：萬元）</div>
+            </div>
+          </div>
+
+          <!-- 9 公司報稅營業額(萬元) -->
+          <div class="form-row">
+            <div class="lbl">公司近一年報稅營業額：</div>
+            <div class="control">
+              <div class="unit">
+                <input id="revenue_10k" type="number" min="0" max="99999" step="1" placeholder="請輸入 0-99,999" />
+                <div class="suffix">萬元</div>
+              </div>
+              <div class="err" id="err_revenue_10k">請輸入 0-99,999（單位：萬元）</div>
+            </div>
+          </div>
+
+          <!-- 10 卡循/現金卡 -->
+          <div class="form-row">
+            <div class="lbl">近三個月是否有信用卡未全額繳清或動用現金卡：</div>
+            <div class="control">
+              <div class="radio">
+                <label><input type="radio" name="cc_revolve" value="yes" /> 是</label>
+                <label><input type="radio" name="cc_revolve" value="no" checked /> 否</label>
+              </div>
+            </div>
+          </div>
+
+          <!-- 11 既有金融機構貸款 -->
+          <div class="form-row">
+            <div class="lbl">公司目前是否與任何金融機構貸款：</div>
+            <div class="control">
+              <div class="radio">
+                <label><input type="radio" name="has_bank_loan" value="yes" /> 是</label>
+                <label><input type="radio" name="has_bank_loan" value="no" checked /> 否</label>
+              </div>
+            </div>
+          </div>
+
+          <!-- 12 租賃公司借款 -->
+          <div class="form-row">
+            <div class="lbl">公司近半年是否有向租賃公司借款：</div>
+            <div class="control">
+              <div class="radio">
+                <label><input type="radio" name="has_lease_loan" value="yes" /> 是</label>
+                <label><input type="radio" name="has_lease_loan" value="no" checked /> 否</label>
+              </div>
+            </div>
+          </div>
+
+          <!-- 13 不動產 -->
+          <div class="form-row">
+            <div class="lbl">公司或您及配偶名下是否有不動產：</div>
+            <div class="control">
+              <div class="radio">
+                <label><input type="radio" name="has_property" value="yes" /> 是</label>
+                <label><input type="radio" name="has_property" value="no" checked /> 否</label>
+              </div>
+            </div>
+          </div>
+
+          <!-- 14 聯徵分數 -->
+          <div class="form-row">
+            <div class="lbl">負責人近期聯徵信用評分：</div>
+            <div class="control">
+              <select id="jcic_score_band">
+                <option value="">請選擇</option>
+                <option value="800p">800分</option>
+                <option value="700_799">700-799分</option>
+                <option value="600_699">600-699分</option>
+                <option value="500_599">500-599分</option>
+                <option value="lt500">500分以下或無法評分</option>
+                <option value="unknown">不清楚聯徵信用分數</option>
+              </select>
+              <div class="err" id="err_jcic_score_band">請選擇聯徵分數</div>
+            </div>
+          </div>
+
+          <!-- 同意（✅ 排版修正） -->
+          <div class="form-row">
+            <div class="lbl"> </div>
+            <div class="control">
+              <label class="agree">
+                <input id="agree" type="checkbox" />
+                <span>我已閱讀「約定及告知事項」</span>
+              </label>
+              <div class="err" id="err_agree">請勾選同意事項</div>
+            </div>
+          </div>
+
+          <div class="actions">
+            <button class="btn btn-outline" type="button" id="btnReset">重新試算</button>
+            <button class="btn btn-primary" type="submit" id="btnSubmit">取得試算結果</button>
+          </div>
+
+          <div class="hint" style="margin-top:12px;">
+            ※ 本頁為利率試算：結果僅供參考，非正式報價/核貸承諾；實際條件以授信審核與契約為準。
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- Result -->
+    <section class="card" aria-label="試算結果">
+      <div class="card-h">
+        <div><p class="title">試算結果</p></div>
+      </div>
+      <div class="card-b">
+        <div class="kpi">
+          <div class="big">
+            <div class="k">建議年利率 APR</div>
+            <div class="v" id="apr">—</div>
+            <div class="hint" id="aprRange"></div>
+          </div>
+
+          <div class="kv">
+            <div class="box"><div class="k">預估每月應繳</div><div class="v" id="monthly">—</div></div>
+            <div class="box"><div class="k">總利息</div><div class="v" id="interest">—</div></div>
+            <div class="box"><div class="k">本息合計</div><div class="v" id="total">—</div></div>
+            <div class="box"><div class="k">手續費</div><div class="v" id="fee">—</div></div>
+          </div>
+
+          <div class="box">
+            <div class="k">風險分數初算</div>
+            <div class="v" id="score">—</div>
+            <div class="hint" id="reason"></div>
+          </div>
+
+          <div class="status" id="status"></div>
+        </div>
+      </div>
+    </section>
+  </div>
+</main>
+
+<script>
+  const API_BASE = "http://127.0.0.1:5000";
+
+  const $ = (id)=>document.getElementById(id);
+  const nf = new Intl.NumberFormat("zh-TW");
+
+  function showErr(id, show){
+    const el = $(id);
+    if(!el) return;
+    el.classList.toggle("show", !!show);
+  }
+
+  function getRadio(name){
+    const el = document.querySelector(`input[name="${name}"]:checked`);
+    return el ? el.value : null;
+  }
+
+  function validate(){
+    let ok = true;
+
+    const tax = ($("tax_id").value || "").trim();
+    const taxOk = /^[0-9]{8}$/.test(tax);
+    showErr("err_tax_id", !taxOk);
+    ok = ok && taxOk;
+
+    const amt = Number($("loan_amt_10k").value);
+    const amtOk = Number.isFinite(amt) && amt >= 1 && amt <= 99999;
+    showErr("err_loan_amt_10k", !amtOk);
+    ok = ok && amtOk;
+
+    const purposeOk = !!$("purpose").value;
+    showErr("err_purpose", !purposeOk);
+    ok = ok && purposeOk;
+
+    const industryOk = !!$("industry").value;
+    showErr("err_industry", !industryOk);
+    ok = ok && industryOk;
+
+    const yearsOk = !!$("years").value;
+    showErr("err_years", !yearsOk);
+    ok = ok && yearsOk;
+
+    const coDep = Number($("co_avg_dep_10k").value);
+    const coDepOk = Number.isFinite(coDep) && coDep >= 0 && coDep <= 99999;
+    showErr("err_co_avg_dep_10k", !coDepOk);
+    ok = ok && coDepOk;
+
+    const owDep = Number($("owner_avg_dep_10k").value);
+    const owDepOk = Number.isFinite(owDep) && owDep >= 0 && owDep <= 99999;
+    showErr("err_owner_avg_dep_10k", !owDepOk);
+    ok = ok && owDepOk;
+
+    const rev = Number($("revenue_10k").value);
+    const revOk = Number.isFinite(rev) && rev >= 0 && rev <= 99999;
+    showErr("err_revenue_10k", !revOk);
+    ok = ok && revOk;
+
+    const jcicOk = !!$("jcic_score_band").value;
+    showErr("err_jcic_score_band", !jcicOk);
+    ok = ok && jcicOk;
+
+    const agreeOk = $("agree").checked;
+    showErr("err_agree", !agreeOk);
+    ok = ok && agreeOk;
+
+    return ok;
+  }
+
+  function bindLiveValidation(){
+    const ids = ["tax_id","loan_amt_10k","purpose","industry","years","co_avg_dep_10k","owner_avg_dep_10k","revenue_10k","jcic_score_band","agree"];
+    ids.forEach(id=>{
+      $(id).addEventListener("input", ()=>validate());
+      $(id).addEventListener("change", ()=>validate());
+    });
+  }
+
+  function payload(){
+    return {
+      tax_id: $("tax_id").value.trim(),
+      loan_amt_10k: Number($("loan_amt_10k").value),
+      purpose: $("purpose").value,
+      industry: $("industry").value,
+      company_years: $("years").value,
+      changed_owner: getRadio("chg_owner") === "yes",
+      co_avg_dep_10k: Number($("co_avg_dep_10k").value),
+      owner_avg_dep_10k: Number($("owner_avg_dep_10k").value),
+      revenue_10k: Number($("revenue_10k").value),
+      cc_revolve: getRadio("cc_revolve") === "yes",
+      has_bank_loan: getRadio("has_bank_loan") === "yes",
+      has_lease_loan: getRadio("has_lease_loan") === "yes",
+      has_property: getRadio("has_property") === "yes",
+      jcic_score_band: $("jcic_score_band").value,
+
+      tenor_months: 36,
+      repay_type: "amortized"
+    };
+  }
+
+  function setStatus(msg, isErr=false){
+    const s = $("status");
+    s.textContent = msg || "";
+    s.className = "status" + (isErr ? " err" : "");
+  }
+
+  function render(res){
+    $("apr").textContent = res.apr_percent.toFixed(2) + "%";
+    $("aprRange").textContent = "參考利率區間：" + res.apr_range;
+    $("monthly").textContent = nf.format(Math.round(res.monthly_payment_ntd)) + " 元";
+    $("interest").textContent = nf.format(Math.round(res.total_interest_ntd)) + " 元";
+    $("total").textContent = nf.format(Math.round(res.total_payment_ntd)) + " 元";
+    $("fee").textContent = nf.format(Math.round(res.fee_ntd)) + " 元";
+    $("score").textContent = res.score + " / 100";
+    $("reason").textContent = (res.reasons || []).join("；");
+  }
+
+  async function submit(){
+    setStatus("計算中…");
+    const body = payload();
+
+    try{
+      const r = await fetch("/api/marketing-quote"),{
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body: JSON.stringify(body)
+      });
+
+      // ✅ 友善錯誤：優先讀 JSON
+      if(!r.ok){
+        let msg = `${r.status}`;
+        try{
+          const j = await r.json();
+          msg += " " + (j.error || JSON.stringify(j));
+        }catch(_){
+          msg += " " + (await r.text());
+        }
+        throw new Error(msg);
+      }
+
+      const data = await r.json();
+      if(!data.ok) throw new Error(data.error || "未知錯誤");
+
+      render(data.result);
+      setStatus("完成。");
+    }catch(e){
+      setStatus("無法取得試算結果（請確認 Python 後端是否啟動 / CORS / API 位址）： " + e.message, true);
+    }
+  }
+
+  function resetForm(){
+    $("loanForm").reset();
+    document.querySelector(`input[name="chg_owner"][value="no"]`).checked = true;
+    document.querySelector(`input[name="cc_revolve"][value="no"]`).checked = true;
+    document.querySelector(`input[name="has_bank_loan"][value="no"]`).checked = true;
+    document.querySelector(`input[name="has_lease_loan"][value="no"]`).checked = true;
+    document.querySelector(`input[name="has_property"][value="no"]`).checked = true;
+
+    ["apr","aprRange","monthly","interest","total","fee","score","reason"].forEach(id=>{
+      if($(id)) $(id).textContent = (id==="aprRange"||id==="reason") ? "" : "—";
+    });
+
+    setStatus("");
+    document.querySelectorAll(".err").forEach(x=>x.classList.remove("show"));
+  }
+
+  bindLiveValidation();
+
+  $("loanForm").addEventListener("submit",(ev)=>{
+    ev.preventDefault();
+    if(!validate()){
+      setStatus("請先修正紅字錯誤欄位。", true);
+      return;
+    }
+    submit();
+  });
+
+  $("btnReset").addEventListener("click", resetForm);
+</script>
+
+</body>
+</html>
